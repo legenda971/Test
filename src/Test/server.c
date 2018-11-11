@@ -59,27 +59,29 @@ int main(int argc, char **argv)
         case -1:
             perror("Chyba pri vytvarani noveho procesu.");
             exit(-7);
+
+        case 0:
+            // Komunikacia s klientom
+            closeSocket(socketListen);
+            printf("Spojenie bolo uspesne nadviazane s clientom.\n");
+            // ...
+            break;
+        default:
+            closeSocket(socketClient);
         }
-    case 0:
-        // Komunikacia s klientom
-        closeSocket(socketListen);
-        printf("Spojenie bolo uspesne nadviazane s clientom.\n");
-        // ...
-        break;
-    default:
-        closeSocket(socketClient);
+
+        printf("Server sa vypina.\n");
+
+        return 0;
     }
 
-    printf("Server sa vypina.\n");
+    void closeSocket(int Socket)
+    {
+        if (close(socketClient) < 0)
+        {
+            perror("Chyba pri zatvarani socketu");
+            exit(-8);
+        }
 
-    return 0;
-}
-
-void closeSocket(int Socket){
-    if (close(socketClient) < 0) {
-        perror("Chyba pri zatvarani socketu");
-        exit(-8);
+        return;
     }
-
-    return;
-}
